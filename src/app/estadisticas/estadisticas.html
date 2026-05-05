@@ -1,0 +1,26 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Estadísticas</h2>
+  </div>
+
+  @if (cargando()) {
+    <div class="estado">Cargando...</div>
+  }
+
+  @if (error()) {
+    <div class="alert error">{{ error() }}</div>
+  }
+
+  @if (datos() && !cargando()) {
+    <div class="stats-grid">
+      @for (item of datos() | keyvalue; track item.key) {
+        <div class="stat-card">
+          <span class="stat-value">{{ item.value }}</span>
+          <span class="stat-label">{{ item.key }}</span>
+        </div>
+      }
+    </div>
+  }
+
+  <button class="btn-refresh" (click)="cargar()">🔄 Actualizar</button>
+</div>

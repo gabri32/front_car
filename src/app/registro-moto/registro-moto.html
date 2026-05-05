@@ -1,0 +1,60 @@
+<div class="registro-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Registro de Moto</h2>
+      <p>Ingresa los datos del vehículo</p>
+    </div>
+
+    <form (ngSubmit)="registrar()" #form="ngForm" class="form">
+
+      <div class="field">
+        <label for="placa">Placa</label>
+        <input
+          id="placa"
+          type="text"
+          [(ngModel)]="placa"
+          name="placa"
+          placeholder="Ej: ABC123"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="field">
+        <label for="cascos">Cascos</label>
+        <input
+          id="cascos"
+          type="number"
+          [(ngModel)]="cascos"
+          name="cascos"
+          placeholder="Cantidad de cascos"
+          min="0"
+        />
+      </div>
+
+      <div class="field">
+        <label for="gabeta">Gabeta</label>
+        <input
+          id="gabeta"
+          type="number"
+          [(ngModel)]="gabeta"
+          name="gabeta"
+          placeholder="Cantidad de gabetas"
+          min="0"
+        />
+      </div>
+
+      @if (error()) {
+        <div class="alert error">{{ error() }}</div>
+      }
+
+      @if (mensaje()) {
+        <div class="alert success">{{ mensaje() }}</div>
+      }
+
+      <button type="submit" [disabled]="cargando()" class="btn-submit">
+        {{ cargando() ? 'Registrando...' : 'Registrar Moto' }}
+      </button>
+
+    </form>
+  </div>
+</div>

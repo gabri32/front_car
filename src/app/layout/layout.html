@@ -1,0 +1,41 @@
+<div class="app-shell" [class.collapsed]="collapsed()">
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="logo-icon">🏍️</span>
+      <span class="logo-text">ParkMoto</span>
+      <button class="toggle-btn" (click)="toggle()" aria-label="Colapsar menú">
+        {{ collapsed() ? '→' : '←' }}
+      </button>
+    </div>
+
+    <nav class="nav">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Inicio</span>
+      </a>
+      <a routerLink="/registro-moto" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">🏍️</span>
+        <span class="nav-label">Registro de Motos</span>
+      </a>
+      <a routerLink="/estadisticas" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Estadísticas</span>
+      </a>
+      <a routerLink="/salida-moto" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">🚪</span>
+        <span class="nav-label">Salida de Motos</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Admin</span>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <router-outlet />
+  </main>
+
+</div>
