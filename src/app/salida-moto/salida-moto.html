@@ -1,35 +1,142 @@
 <div class="page-container">
   <div class="page-header">
     <h2>Salida de Moto</h2>
+    <span class="badge-activas">{{ motos().length }} en parqueadero</span>
   </div>
 
-  <div class="card">
-    <form (ngSubmit)="registrarSalida()" class="form">
+  <!-- ── PASO 1: Lista de motos activas ── -->
+  @if (paso() === 'lista') {
 
-      <div class="field">
-        <label for="placa">Placa</label>
-        <input
-          id="placa"
-          type="text"
-          [(ngModel)]="placa"
-          name="placa"
-          placeholder="Ej: ABC123"
-          autocomplete="off"
-        />
+    @if (mensaje()) {
+      <div class="alert success">{{ mensaje() }}</div>
+    }
+
+    @if (cargandoLista()) {
+      <div class="estado">Cargando motos...</div>
+    } @else if (motos().length === 0) {
+      <div class="estado vacio">No hay motos en el parqueadero.</div>
+    } @else {
+      <div class="tabla-wrap">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Placa</th>
+              <th>Ingreso</th>
+              <th>Cascos</th>
+              <th>Gabeta</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (moto of motos(); track moto.id_moto) {
+              <tr>
+                <td class="id">{{ moto.id_moto }}</td>
+                <td class="placa">{{ moto.placa | uppercase }}</td>
+                <td class="fecha">{{ moto.fecha_ingreso | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td class="centro">{{ moto.cascos }}</td>
+                <td class="centro">{{ moto.gabeta }}</td>
+                <td>
+                  <button class="btn-calcular" (click)="calcularCobro(moto)">
+                    💰 Calcular cobro
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <button class="btn-refresh" (click)="cargarMotosActivas()">🔄 Actualizar lista</button>
+  }
+
+  <!-- ── PASO 2: Calculando ── -->
+  @if (paso() === 'calculando') {
+    <div class="card-cobro">
+      <div class="detalle-moto">
+        <div class="detalle-placa">{{ motoSeleccionada()!.placa | uppercase }}</div>
+      </div>
+      <div class="calculo-loading">Calculando cobro... ⏳</div>
+    </div>
+  }
+
+  <!-- ── PASO 3: Cobro listo ── -->
+  @if (paso() === 'cobro') {
+    <div class="card-cobro">
+
+      <!-- Datos de la moto -->
+      <div class="detalle-moto">
+        <div class="detalle-placa">{{ motoSeleccionada()!.placa | uppercase }}</div>
+        <div class="detalle-fila">
+          <span>Ticket</span>
+          <strong>#{{ motoSeleccionada()!.id_moto }}</strong>
+        </div>
+        <div class="detalle-fila">
+          <span>Ingreso</span>
+          <strong>{{ motoSeleccionada()!.fecha_ingreso | date:'dd/MM/yyyy HH:mm' }}</strong>
+        </div>
+        <div class="detalle-fila">
+          <span>Cascos</span>
+          <strong>{{ motoSeleccionada()!.cascos }}</strong>
+        </div>
+        <div class="detalle-fila">
+          <span>Gabeta</span>
+          <strong>{{ motoSeleccionada()!.gabeta }}</strong>
+        </div>
+      </div>
+
+      <!-- Resultado del cálculo -->
+      @if (calculo()) {
+        <div class="calculo-box">
+          <div class="calculo-fila">
+            <span>⏱ Horas en parqueadero</span>
+            <strong class="horas">{{ calculo()!.horas }} h</strong>
+          </div>
+          <div class="calculo-fila calculo-total">
+            <span>💰 Valor calculado</span>
+            <strong>${{ calculo()!.total }}</strong>
+          </div>
+        </div>
+      }
+
+      @if (errorCalculo()) {
+        <div class="alert warning">⚠️ {{ errorCalculo() }} — ingresa el valor manualmente.</div>
+      }
+
+      <!-- Valor editable -->
+      <div class="campo-valor">
+        <label for="valorFinal">Valor a cobrar</label>
+        <div class="input-prefix">
+          <span>$</span>
+          <input
+            id="valorFinal"
+            type="number"
+            [ngModel]="valorFinal()"
+            (ngModelChange)="valorFinal.set($event)"
+            name="valorFinal"
+            min="0"
+            placeholder="0"
+          />
+        </div>
+        <small>Puedes modificar el valor antes de registrar la salida</small>
       </div>
 
       @if (error()) {
         <div class="alert error">{{ error() }}</div>
       }
 
-      @if (mensaje()) {
-        <div class="alert success">{{ mensaje() }}</div>
-      }
+      <!-- Acciones -->
+      <div class="acciones">
+        <button class="btn-cancelar" (click)="cancelar()" [disabled]="cargandoFinal()">
+          ← Volver
+        </button>
+        <button class="btn-salida-final" (click)="registrarSalidaFinal()" [disabled]="cargandoFinal()">
+          {{ cargandoFinal() ? 'Registrando...' : '🚀 Registrar salida final' }}
+        </button>
+      </div>
 
-      <button type="submit" [disabled]="cargando()" class="btn-submit">
-        {{ cargando() ? 'Procesando...' : 'Registrar Salida' }}
-      </button>
+    </div>
+  }
 
-    </form>
-  </div>
 </div>

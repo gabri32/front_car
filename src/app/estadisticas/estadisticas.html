@@ -1,26 +1,177 @@
 <div class="page-container">
   <div class="page-header">
     <h2>Estadísticas</h2>
+    <button class="btn-refresh" (click)="cargar()">🔄 Actualizar</button>
   </div>
 
   @if (cargando()) {
-    <div class="estado">Cargando...</div>
+    <div class="estado">Cargando datos...</div>
   }
 
   @if (error()) {
     <div class="alert error">{{ error() }}</div>
   }
 
-  @if (datos() && !cargando()) {
+  @if (!cargando() && !error()) {
+
+    <!-- ── Tarjetas globales ── -->
     <div class="stats-grid">
-      @for (item of datos() | keyvalue; track item.key) {
-        <div class="stat-card">
-          <span class="stat-value">{{ item.value }}</span>
-          <span class="stat-label">{{ item.key }}</span>
-        </div>
+      <div class="stat-card azul">
+        <span class="stat-value">{{ totalIngresos }}</span>
+        <span class="stat-label">Total ingresos</span>
+      </div>
+      <div class="stat-card verde">
+        <span class="stat-value">{{ totalSalidas }}</span>
+        <span class="stat-label">Total salidas</span>
+      </div>
+      <div class="stat-card naranja">
+        <span class="stat-value">{{ enParqueadero }}</span>
+        <span class="stat-label">En parqueadero</span>
+      </div>
+      <div class="stat-card morado">
+        <span class="stat-value stat-pesos">{{ formatPesos(recaudoTotal) }}</span>
+        <span class="stat-label">Recaudo total</span>
+      </div>
+    </div>
+
+    <!-- ── Filtros ── -->
+    <div class="filtros-panel">
+      <span class="filtros-titulo">Filtros</span>
+
+      <div class="filtro-grupo">
+        <label>Día exacto</label>
+        <select [(ngModel)]="filtroDia" (ngModelChange)="filtroMes.set(''); filtroDesde.set(''); filtroHasta.set('')">
+          <option value="">— Seleccionar —</option>
+          @for (d of diasDisponibles; track d) {
+            <option [value]="d">{{ d | date:'dd/MM/yyyy':'UTC' }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filtro-grupo">
+        <label>Mes</label>
+        <select [(ngModel)]="filtroMes" (ngModelChange)="filtroDia.set(''); filtroDesde.set(''); filtroHasta.set('')">
+          <option value="">— Seleccionar —</option>
+          @for (m of mesesDisponibles; track m) {
+            <option [value]="m">{{ m | date:'MMMM yyyy':'UTC':'es' }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filtro-grupo">
+        <label>Desde</label>
+        <input type="date" [(ngModel)]="filtroDesde" (ngModelChange)="filtroDia.set(''); filtroMes.set('')" />
+      </div>
+
+      <div class="filtro-grupo">
+        <label>Hasta</label>
+        <input type="date" [(ngModel)]="filtroHasta" (ngModelChange)="filtroDia.set(''); filtroMes.set('')" />
+      </div>
+
+      @if (hayFiltroActivo) {
+        <button class="btn-limpiar" (click)="limpiarFiltros()">✕ Limpiar filtros</button>
       }
     </div>
-  }
 
-  <button class="btn-refresh" (click)="cargar()">🔄 Actualizar</button>
+    <!-- ── Resumen del período filtrado ── -->
+    @if (hayFiltroActivo) {
+      <div class="periodo-label">
+        Mostrando {{ motosFiltradas.length }} registro(s)
+      </div>
+
+      <div class="stats-grid cuatro">
+        <div class="stat-card azul sm">
+          <span class="stat-value">{{ resumenFiltrado.ingresos }}</span>
+          <span class="stat-label">Ingresos</span>
+        </div>
+        <div class="stat-card verde sm">
+          <span class="stat-value">{{ resumenFiltrado.salidas }}</span>
+          <span class="stat-label">Salidas</span>
+        </div>
+        <div class="stat-card naranja sm">
+          <span class="stat-value">{{ resumenFiltrado.enParqueadero }}</span>
+          <span class="stat-label">Sin salida</span>
+        </div>
+        <div class="stat-card morado sm">
+          <span class="stat-value stat-pesos">{{ formatPesos(resumenFiltrado.recaudo) }}</span>
+          <span class="stat-label">Recaudo período</span>
+        </div>
+      </div>
+
+      <!-- Detalle de motos del período -->
+      <div class="tabla-wrap">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Placa</th>
+              <th>Ingreso</th>
+              <th>Salida</th>
+              <th>Valor</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (m of motosFiltradas; track m.id_moto) {
+              <tr>
+                <td class="id">{{ m.id_moto }}</td>
+                <td class="placa">{{ m.placa | uppercase }}</td>
+                <td class="fecha">{{ formatearFecha(m.fecha_ingreso) }}</td>
+                <td class="fecha">{{ m.fecha_salida ? formatearFecha(m.fecha_salida) : '—' }}</td>
+                <td class="valor">{{ m.valor_salida != null ? formatPesos(m.valor_salida) : '—' }}</td>
+                <td>
+                  @if (m.fecha_salida) {
+                    <span class="badge salida">Salió</span>
+                  } @else {
+                    <span class="badge activa">Activa</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- ── Tabla resumen por día ── -->
+    <h3 class="seccion-titulo">Resumen por día</h3>
+    <div class="tabla-wrap">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th class="centro">Ingresos</th>
+            <th class="centro">Salidas</th>
+            <th class="centro">En parqueadero</th>
+            <th class="derecha">Recaudo del día</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of resumenPorDia; track r.key) {
+            <tr
+              class="fila-dia"
+              [class.fila-activa]="filtroDia() === r.key"
+              (click)="seleccionarDia(r.key)"
+            >
+              <td class="fecha-dia">{{ r.fecha }}</td>
+              <td class="centro">{{ r.total_ingresos }}</td>
+              <td class="centro verde-txt">{{ r.total_salidas }}</td>
+              <td class="centro naranja-txt">{{ r.en_parqueadero }}</td>
+              <td class="derecha recaudo-dia">{{ formatPesos(r.recaudo) }}</td>
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr class="fila-total">
+            <td><strong>TOTAL</strong></td>
+            <td class="centro"><strong>{{ totalIngresos }}</strong></td>
+            <td class="centro verde-txt"><strong>{{ totalSalidas }}</strong></td>
+            <td class="centro naranja-txt"><strong>{{ enParqueadero }}</strong></td>
+            <td class="derecha recaudo-dia"><strong>{{ formatPesos(recaudoTotal) }}</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+  }
 </div>

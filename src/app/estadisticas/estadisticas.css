@@ -1,13 +1,13 @@
 .page-container {
-  padding: 40px;
-  max-width: 800px;
+  padding: 32px 40px;
+  max-width: 960px;
 }
 
 .page-header {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .page-header h2 {
@@ -16,43 +16,246 @@
   color: #1a1a2e;
 }
 
-.back-btn {
-  text-decoration: none;
-  color: #4f46e5;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
+/* ── Tarjetas ── */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
   margin-bottom: 28px;
 }
 
+.stats-grid.cuatro {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 700px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 .stat-card {
-  background: #fff;
   border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-  padding: 28px 20px;
+  padding: 22px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
 }
+
+.stat-card.sm { padding: 16px 12px; }
+
+.stat-card.azul    { background: #eff6ff; }
+.stat-card.verde   { background: #f0fdf4; }
+.stat-card.naranja { background: #fffbeb; }
+.stat-card.morado  { background: #f5f3ff; }
 
 .stat-value {
   font-size: 2rem;
-  font-weight: 700;
-  color: #4f46e5;
+  font-weight: 800;
+  line-height: 1;
 }
+
+.stat-card.sm .stat-value { font-size: 1.6rem; }
+
+.stat-pesos {
+  font-size: 1.2rem !important;
+  text-align: center;
+}
+
+.stat-card.sm .stat-pesos { font-size: 1rem !important; }
+
+.stat-card.azul    .stat-value { color: #2563eb; }
+.stat-card.verde   .stat-value { color: #16a34a; }
+.stat-card.naranja .stat-value { color: #d97706; }
+.stat-card.morado  .stat-value { color: #7c3aed; }
 
 .stat-label {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: #666;
-  text-transform: capitalize;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  text-align: center;
 }
 
+/* ── Panel de filtros ── */
+.filtros-panel {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  margin-bottom: 24px;
+}
+
+.filtros-titulo {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #999;
+  align-self: center;
+  margin-right: 4px;
+}
+
+.filtro-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filtro-grupo label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.filtro-grupo select,
+.filtro-grupo input[type="date"] {
+  padding: 7px 10px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  background: #fafafa;
+  min-width: 140px;
+}
+
+.filtro-grupo select:focus,
+.filtro-grupo input[type="date"]:focus {
+  border-color: #4f46e5;
+  background: #fff;
+}
+
+.btn-limpiar {
+  background: transparent;
+  border: 1.5px solid #e5e7eb;
+  color: #888;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-end;
+}
+
+.btn-limpiar:hover {
+  border-color: #b91c1c;
+  color: #b91c1c;
+}
+
+/* ── Período label ── */
+.periodo-label {
+  font-size: 0.82rem;
+  color: #888;
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+/* ── Tablas ── */
+.seccion-titulo {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 24px 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabla-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  margin-bottom: 28px;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 0.9rem;
+}
+
+.tabla thead tr {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+.tabla th {
+  padding: 11px 16px;
+  text-align: left;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabla th.centro { text-align: center; }
+.tabla th.derecha { text-align: right; }
+
+.tabla tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.15s;
+}
+
+.tabla tbody tr:hover { background: #f8f7ff; }
+
+.tabla td { padding: 11px 16px; color: #333; }
+
+td.id      { color: #aaa; font-size: 0.82rem; }
+td.placa   { font-weight: 700; color: #1a1a2e; letter-spacing: 1px; }
+td.fecha   { font-size: 0.84rem; color: #555; }
+td.valor   { font-weight: 600; color: #7c3aed; }
+td.centro  { text-align: center; }
+td.derecha { text-align: right; }
+
+.verde-txt   { color: #16a34a; font-weight: 700; }
+.naranja-txt { color: #d97706; font-weight: 700; }
+
+.recaudo-dia {
+  font-weight: 700;
+  color: #7c3aed;
+  text-align: right;
+}
+
+.fila-dia { cursor: pointer; }
+.fila-dia:hover { background: #f5f3ff !important; }
+.fila-activa { background: #ede9fe !important; }
+
+td.fecha-dia { font-weight: 600; color: #1a1a2e; }
+
+/* ── Fila total ── */
+.fila-total {
+  background: #f8f7ff;
+  border-top: 2px solid #e5e7eb;
+}
+
+.fila-total td {
+  padding: 12px 16px;
+  font-size: 0.9rem;
+}
+
+/* ── Badges ── */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge.salida { background: #dcfce7; color: #15803d; }
+.badge.activa { background: #fef9c3; color: #a16207; }
+
+/* ── Misc ── */
 .estado {
   text-align: center;
   color: #888;
@@ -69,16 +272,18 @@
 }
 
 .btn-refresh {
-  background: #4f46e5;
-  color: #fff;
-  border: none;
+  background: transparent;
+  border: 1.5px solid #4f46e5;
+  color: #4f46e5;
   border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 0.9rem;
+  padding: 7px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .btn-refresh:hover {
-  background: #4338ca;
+  background: #4f46e5;
+  color: #fff;
 }

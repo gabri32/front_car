@@ -56,5 +56,62 @@
       </button>
 
     </form>
+
+    <!-- Datos del recibo después del registro -->
+    @if (motoRegistrada()) {
+      <div class="recibo-preview">
+        <div class="recibo-titulo">PARKING</div>
+        <div class="recibo-subtitulo">Parqueadero</div>
+        <div class="recibo-factura">Factura de Venta</div>
+        <hr class="recibo-sep">
+
+        <div class="recibo-fila">
+          <span class="recibo-label">No. Ticket</span>
+          <span class="recibo-valor">{{ motoRegistrada()!.id_moto }}</span>
+        </div>
+        <div class="recibo-fila">
+          <span class="recibo-label">Fecha</span>
+          <span class="recibo-valor">
+            {{ motoRegistrada()!.dia_mes }} de {{ getNombreMes(motoRegistrada()!.mes) }} de {{ motoRegistrada()!.anio }}
+          </span>
+        </div>
+        <div class="recibo-fila">
+          <span class="recibo-label">Hora ingreso</span>
+          <span class="recibo-valor">{{ motoRegistrada()!.fecha_ingreso | date:'HH:mm:ss' }}</span>
+        </div>
+
+        <hr class="recibo-sep">
+
+        <div class="recibo-placa">{{ motoRegistrada()!.placa }}</div>
+
+        <hr class="recibo-sep">
+
+        <div class="recibo-fila">
+          <span class="recibo-label">Cascos</span>
+          <span class="recibo-valor">{{ motoRegistrada()!.cascos }}</span>
+        </div>
+        <div class="recibo-fila">
+          <span class="recibo-label">Gabeta</span>
+          <span class="recibo-valor">{{ motoRegistrada()!.gabeta }}</span>
+        </div>
+        <div class="recibo-fila">
+          <span class="recibo-label">Fecha salida</span>
+          <span class="recibo-valor">{{ motoRegistrada()!.fecha_salida ?? 'Pendiente' }}</span>
+        </div>
+        <div class="recibo-fila">
+          <span class="recibo-label">Valor salida</span>
+          <span class="recibo-valor">
+            {{ motoRegistrada()!.valor_salida != null ? ('$' + motoRegistrada()!.valor_salida) : 'Pendiente' }}
+          </span>
+        </div>
+
+        <hr class="recibo-sep">
+
+        <button class="btn-imprimir" (click)="imprimirRecibo()">
+          🖨️ Imprimir Recibo
+        </button>
+      </div>
+    }
+
   </div>
 </div>
