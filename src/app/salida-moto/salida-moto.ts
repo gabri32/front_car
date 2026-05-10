@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, computed, signal, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ApiService } from '../services/api.service';
@@ -35,6 +35,14 @@ export class SalidaMoto implements OnInit {
   calculo          = signal<CalculoSalida | null>(null);
   valorFinal       = signal<number>(0);
   paso             = signal<Paso>('lista');
+
+  placaFiltro      = signal('');
+  motosFiltradas   = computed(() => {
+    const filtro = this.placaFiltro().trim().toLowerCase();
+    return filtro
+      ? this.motos().filter(moto => moto.placa.toLowerCase().includes(filtro))
+      : this.motos();
+  });
 
   mensaje        = signal('');
   error          = signal('');

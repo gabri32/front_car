@@ -1,7 +1,19 @@
 <div class="page-container">
   <div class="page-header">
     <h2>Salida de Moto</h2>
-    <span class="badge-activas">{{ motos().length }} en parqueadero</span>
+    <span class="badge-activas">{{ motosFiltradas().length }} de {{ motos().length }} en parqueadero</span>
+  </div>
+
+  <div class="filtro-placa">
+    <label for="filtroPlaca">Filtrar por placa</label>
+    <input
+      id="filtroPlaca"
+      type="search"
+      [ngModel]="placaFiltro()"
+      (ngModelChange)="placaFiltro.set($event)"
+      placeholder="Ej. ABC123"
+      autocomplete="off"
+    />
   </div>
 
   <!-- ── PASO 1: Lista de motos activas ── -->
@@ -15,6 +27,8 @@
       <div class="estado">Cargando motos...</div>
     } @else if (motos().length === 0) {
       <div class="estado vacio">No hay motos en el parqueadero.</div>
+    } @else if (motosFiltradas().length === 0) {
+      <div class="estado vacio">No hay motos que coincidan con esa placa.</div>
     } @else {
       <div class="tabla-wrap">
         <table class="tabla">
@@ -29,7 +43,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (moto of motos(); track moto.id_moto) {
+            @for (moto of motosFiltradas(); track moto.id_moto) {
               <tr>
                 <td class="id">{{ moto.id_moto }}</td>
                 <td class="placa">{{ moto.placa | uppercase }}</td>
