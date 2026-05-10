@@ -1,0 +1,129 @@
+.login-bg {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+  padding: 24px;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 48px 40px 36px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+.login-icon {
+  font-size: 3rem;
+  margin-bottom: 8px;
+}
+
+.login-titulo {
+  margin: 0 0 4px;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: #1a1a2e;
+}
+
+.login-sub {
+  margin: 0 0 32px;
+  color: #888;
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.input-wrap {
+  display: flex;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.input-wrap:focus-within {
+  border-color: #4f46e5;
+}
+
+.input-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 12px 14px;
+  font-size: 1rem;
+  color: #1a1a2e;
+  background: transparent;
+}
+
+.toggle-pwd {
+  background: transparent;
+  border: none;
+  padding: 0 14px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #888;
+  transition: color 0.2s;
+}
+
+.toggle-pwd:hover { color: #4f46e5; }
+
+.btn-ingresar {
+  padding: 13px;
+  background: #1a1a2e;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+.btn-ingresar:hover {
+  background: #4f46e5;
+}
+
+.alert.error {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.login-nota {
+  margin: 20px 0 0;
+  font-size: 0.78rem;
+  color: #bbb;
+  text-align: center;
+}

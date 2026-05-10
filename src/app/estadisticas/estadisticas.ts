@@ -1,7 +1,7 @@
 import { Component, signal, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '../services/api.service';
 
 export interface MotoRegistro {
   id_moto: number;
@@ -45,16 +45,16 @@ export class Estadisticas implements OnInit {
   filtroDesde = signal('');   // "YYYY-MM-DD"
   filtroHasta = signal('');   // "YYYY-MM-DD"
 
-  constructor(private http: HttpClient) {}
+  constructor(private api: ApiService) {}
 
   ngOnInit() { this.cargar(); }
 
   cargar() {
     this.cargando.set(true);
     this.error.set('');
-    this.http.get<MotoRegistro[]>('http://localhost:3000/admin/obtenerMotos').subscribe({
-      next: (res) => { this.todasMotos.set(res); this.cargando.set(false); },
-      error: (err) => { this.error.set(err?.error?.message || 'Error al cargar datos.'); this.cargando.set(false); }
+    this.api.obtenerMotos().subscribe({
+      next: (res: any[]) => { this.todasMotos.set(res); this.cargando.set(false); },
+      error: (err: any) => { this.error.set(err?.error?.message || 'Error al cargar datos.'); this.cargando.set(false); }
     });
   }
 

@@ -1,8 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ApiService } from '../services/api.service';
 
 export interface MotoRegistrada {
   id_moto: number;
@@ -33,7 +33,7 @@ export class RegistroMoto {
   cargando = signal(false);
   motoRegistrada = signal<MotoRegistrada | null>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private api: ApiService) {}
 
   registrar() {
     if (!this.placa || this.cascos === null || this.gabeta === null) {
@@ -46,14 +46,8 @@ export class RegistroMoto {
     this.error.set('');
     this.motoRegistrada.set(null);
 
-    const body = {
-      placa: this.placa,
-      cascos: this.cascos,
-      gabeta: this.gabeta
-    };
-
-    this.http.post<MotoRegistrada>('http://localhost:3000/admin/createMoto', body).subscribe({
-      next: (res) => {
+    this.api.crearMoto({ placa: this.placa, cascos: this.cascos, gabeta: this.gabeta }).subscribe({
+      next: (res: MotoRegistrada) => {
         this.motoRegistrada.set(res);
         this.mensaje.set('Moto registrada exitosamente.');
         this.placa = '';
@@ -61,7 +55,7 @@ export class RegistroMoto {
         this.gabeta = null;
         this.cargando.set(false);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.error.set(err?.error?.message || 'Error al registrar la moto.');
         this.cargando.set(false);
       }
